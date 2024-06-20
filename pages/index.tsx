@@ -1,38 +1,38 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
-import { useEffect, useState } from 'react';
-import { Button, Space } from 'antd';
-import { Company } from './api/download';
+import Head from "next/head";
+import styles from "../styles/Home.module.css";
+import { useEffect, useState } from "react";
+import { Button, Space } from "antd";
+import { Company } from "./api/download";
 
 export default function Home() {
   const [clutchReport, setClutchReportStatus] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>(false);
   const [scrapedData, setScrapedData] = useState<Company[]>([]);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const handleDownload = async () => {
     try {
-      const response = await fetch('/api/download', {
-        method: 'POST',
+      const response = await fetch("/api/download", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ data: scrapedData }),
       });
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
 
       const now = new Date();
       const formattedDate = now.toLocaleString();
 
       link.href = url;
-      link.setAttribute('download', `report${formattedDate}.xlsx`);
+      link.setAttribute("download", `report${formattedDate}.xlsx`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error('Error downloading Excel file:', error);
+      console.error("Error downloading Excel file:", error);
     }
   };
 
@@ -40,14 +40,14 @@ export default function Home() {
     async function fetchData() {
       setLoading(true);
       try {
-        const response = await fetch('/api/scrape');
+        const response = await fetch("/api/scrape");
         const data = await response.json();
         setScrapedData(data);
         setLoading(false);
       } catch (error) {
         setLoading(false);
         setError(error);
-        console.error('Error fetching scraped data:', error);
+        console.error("Error fetching scraped data:", error);
       }
     }
     if (clutchReport) {
@@ -65,7 +65,7 @@ export default function Home() {
       </Head>
 
       <main>
-        {error && <div style={{ color: 'red' }}>Error: {error}</div>}
+        {error && <div style={{ color: "red" }}>Error: {error}</div>}
         <h1>Scraped Data</h1>
         <Space direction="horizontal" size={16}>
           <Button
