@@ -1,3 +1,4 @@
+'use server';
 import puppeteer, { Browser as BrowserType, Page } from 'puppeteer';
 
 class Browser {

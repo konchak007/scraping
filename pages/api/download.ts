@@ -1,5 +1,7 @@
+"use server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { utils, write } from "xlsx";
+const fs = require("fs");
 
 interface Services {
   [key: string]: string;
@@ -33,7 +35,10 @@ interface ExelStructure {
   industries_percent: string;
 }
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === "POST") {
     const { data } = req.body;
 

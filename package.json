@@ -5,12 +5,15 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint --fix"
+    
   },
+  "browser": { "fs": false },
   "dependencies": {
     "antd": "^5.18.3",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
     "exceljs": "^4.4.0",
+    "fs": "^0.0.2",
     "next": "^14.2.4",
     "puppeteer": "^22.11.2",
     "react": "18.2.0",

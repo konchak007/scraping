@@ -1,3 +1,4 @@
+"use client";
 import Browser from "../../utils";
 import { clutch } from "../../utils/selectors";
 

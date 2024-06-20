@@ -1,10 +1,10 @@
+"use server";
 import puppeteer, { Page } from "puppeteer";
 import Browser from "../../utils";
 import { CLUTCH } from "../../utils/constants";
 import { clutch } from "../../utils/selectors";
 import { highlightsGatherData } from "../steps/clutchProfileGatherData";
 import { pageLoop } from "../steps/nextPageAutomation";
-
 const chunkSize = 10; // Number of links to process concurrently
 
 export default async function handler(req, res) {
