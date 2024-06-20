@@ -1,0 +1,51 @@
+import puppeteer, { Browser as BrowserType, Page } from 'puppeteer';
+
+class Browser {
+  private instance: BrowserType = null;
+  private pageInstance: Page = null;
+
+  async init(config: object) {
+    const browser = await puppeteer.launch(config);
+
+    this.instance = browser;
+    this.pageInstance = await browser.newPage();
+    this.pageInstance.setDefaultNavigationTimeout(0);
+    await this.pageInstance.setViewport({ width: 1080, height: 3024 });
+  }
+
+  public goto(url: string, params?: any) {
+    return this.page.goto(url);
+  }
+
+  public async clickBySelector(selector: string) {
+    await this.page.waitForSelector(selector);
+    await this.page.click(selector);
+  }
+
+  public async getTextValueBySelector(selector: string) {
+    await this.page.waitForSelector(selector);
+    const text = await this.page.$eval(selector, (elem) =>
+      elem.textContent.trim()
+    );
+
+    return text;
+  }
+
+  public close() {
+    return this.instance.close();
+  }
+
+  public async waitForSelector(selector: string) {
+    await this.page.waitForSelector(selector);
+  }
+
+  public onPage(eventType: any, callback: () => void) {
+    this.page.on(eventType, callback);
+  }
+
+  public get page() {
+    return this.pageInstance;
+  }
+}
+
+export default Browser;

@@ -1,64 +1,86 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
+import { useEffect, useState } from 'react';
+import { Button, Space } from 'antd';
+import { Company } from './api/download';
 
 export default function Home() {
+  const [clutchReport, setClutchReportStatus] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [scrapedData, setScrapedData] = useState<Company[]>([]);
+  const [error, setError] = useState<string>('');
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch('/api/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: scrapedData }),
+      });
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      const now = new Date();
+      const formattedDate = now.toLocaleString();
+
+      link.href = url;
+      link.setAttribute('download', `report${formattedDate}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Error downloading Excel file:', error);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/scrape');
+        const data = await response.json();
+        setScrapedData(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError(error);
+        console.error('Error fetching scraped data:', error);
+      }
+    }
+    if (clutchReport) {
+      fetchData();
+    }
+  }, [clutchReport]);
+
+  console.log({ scrapedData });
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Scrapping</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1 className={styles.title}>
-          Welcome to <a href="httpss://nextjs.org">Next .js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing <code>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
+        {error && <div style={{ color: 'red' }}>Error: {error}</div>}
+        <h1>Scraped Data</h1>
+        <Space direction="horizontal" size={16}>
+          <Button
+            loading={loading}
+            onClick={() => setClutchReportStatus((prev) => !prev)}
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
+            Generate Clutch report
+          </Button>
+          {scrapedData.length > 0 && (
+            <Button onClick={handleDownload} type="primary">
+              Download Excel
+            </Button>
+          )}
+        </Space>
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
 
       <style jsx>{`
         main {
@@ -92,8 +114,15 @@ export default function Home() {
           border-radius: 5px;
           padding: 0.75rem;
           font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+          font-family:
+            Menlo,
+            Monaco,
+            Lucida Console,
+            Liberation Mono,
+            DejaVu Sans Mono,
+            Bitstream Vera Sans Mono,
+            Courier New,
+            monospace;
         }
       `}</style>
 
@@ -102,8 +131,17 @@ export default function Home() {
         body {
           padding: 0;
           margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+          font-family:
+            -apple-system,
+            BlinkMacSystemFont,
+            Segoe UI,
+            Roboto,
+            Oxygen,
+            Ubuntu,
+            Cantarell,
+            Fira Sans,
+            Droid Sans,
+            Helvetica Neue,
             sans-serif;
         }
         * {
