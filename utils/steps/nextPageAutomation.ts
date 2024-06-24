@@ -1,5 +1,5 @@
-import Browser from '../../utils';
-import { clutch } from '../../utils/selectors';
+import Browser from "..";
+import { clutch } from "../selectors";
 
 const links: string[] = [];
 
@@ -11,11 +11,11 @@ export const pageLoop = async (browser: Browser) => {
 
   const hrefs = await page.evaluate((selector: string) => {
     const elements = document.querySelectorAll(selector);
-    return Array.from(elements).map((elem) => elem.getAttribute('href'));
+    return Array.from(elements).map((elem) => elem.getAttribute("href"));
   }, clutch.organizationLink);
   links.push(...hrefs);
 
-  const ele = await page.$('.page-item.next');
+  const ele = await page.$(".page-item.next");
 
   if (ele) {
     pageNumber += 1;
@@ -28,8 +28,8 @@ export const pageLoop = async (browser: Browser) => {
     await newbBrowser.goto(
       `https://clutch.co/call-centers/customer-support?page=${pageNumber}`,
       {
-        waitUntil: 'networkidle0',
-      }
+        waitUntil: "networkidle0",
+      },
     );
     await pageLoop(newbBrowser);
   }
