@@ -1,8 +1,8 @@
-"use client";
+import React, { useState } from "react";
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { useEffect, useState } from "react";
-import { Button, Space } from "antd";
+
+import { Button, Space } from "antd/lib";
 import { Company } from "./api/download";
 
 export default function Home() {
@@ -37,24 +37,18 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      try {
-        const response = await fetch("/api/scrape");
-        const data = await response.json();
-        setScrapedData(data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        setError(error);
-        console.error("Error fetching scraped data:", error);
-      }
+  const handleClick = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/scrape", { method: "POST" });
+      const data = await response.json();
+      setScrapedData(data);
+    } catch (error) {
+      console.error("Error:", error);
+      setError(error);
     }
-    if (clutchReport) {
-      fetchData();
-    }
-  }, [clutchReport]);
+    setLoading(false);
+  };
 
   console.log({ scrapedData });
 
@@ -69,10 +63,7 @@ export default function Home() {
         {error && <div style={{ color: "red" }}>Error: {error}</div>}
         <h1>Scraped Data</h1>
         <Space direction="horizontal" size={16}>
-          <Button
-            loading={loading}
-            onClick={() => setClutchReportStatus((prev) => !prev)}
-          >
+          <Button loading={loading} onClick={handleClick}>
             Generate Clutch report
           </Button>
           {scrapedData.length > 0 && (
@@ -82,6 +73,17 @@ export default function Home() {
           )}
         </Space>
       </main>
+
+      <footer>
+        <a
+          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Powered by{" "}
+          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
+        </a>
+      </footer>
 
       <style jsx>{`
         main {
