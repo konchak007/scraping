@@ -1,8 +1,8 @@
+"use server";
 import Browser from "../../utils";
 import { CLUTCH } from "../../utils/constants";
 import { highlightsGatherData } from "../../utils/steps/clutchProfileGatherData";
 import { pageLoop } from "../../utils/steps/nextPageAutomation";
-
 
 const chunkSize = 10; // Number of links to process concurrently
 

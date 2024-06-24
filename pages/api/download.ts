@@ -1,7 +1,6 @@
 "use server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { utils, write } from "xlsx";
-const fs = require("fs");
 
 interface Services {
   [key: string]: string;
