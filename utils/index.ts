@@ -1,7 +1,6 @@
 "use server";
-import puppeteer, { Browser as BrowserType, Page } from "puppeteer";
 import chromium from '@sparticuz/chromium-min'
-import puppeteerCore from "puppeteer-core";
+import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
 
 let browser;
 
@@ -24,7 +23,7 @@ class Browser {
       });
    
     } else {
-      browser = await puppeteer.launch(config);
+      browser = await puppeteerCore.launch(config);
     }
 
     this.instance = browser;
