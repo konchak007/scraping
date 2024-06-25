@@ -6,6 +6,11 @@ import styles from "../styles/Home.module.css";
 import { Button, Space } from "antd/lib";
 import { Company } from "./api/download/route";
 
+interface Response {
+  error: "";
+  results: Company[] | [];
+}
+
 export default function Home() {
   const [clutchReport, setClutchReportStatus] = useState<boolean>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,18 +45,21 @@ export default function Home() {
 
   const handleClick = async () => {
     setLoading(true);
+    setError("");
+    setScrapedData([]);
     try {
       const response = await fetch("/api/scrape", { method: "POST" });
-      const data = await response.json();
-      setScrapedData(data);
+      const data: Response = await response.json();
+
+      setScrapedData(data?.results);
+      setError(data?.error);
     } catch (error) {
-      console.error("Error:", error);
-      setError(error);
+      console.error("Error:", error.error);
+      setScrapedData([]);
+      setError(error.error);
     }
     setLoading(false);
   };
-
-  console.log({ scrapedData });
 
   return (
     <div className={styles.container}>

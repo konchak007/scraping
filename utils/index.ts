@@ -1,12 +1,31 @@
 "use server";
 import puppeteer, { Browser as BrowserType, Page } from "puppeteer";
+import chromium from '@sparticuz/chromium-min'
+import puppeteerCore from "puppeteer-core";
+
+let browser;
 
 class Browser {
   private instance: BrowserType = null;
   private pageInstance: Page = null;
 
   async init(config: object) {
-    const browser = await puppeteer.launch(config);
+    chromium.setGraphicsMode = false
+  
+    if (process.env.VERCEL_ENV === "production") {
+      console.log(124)
+      const executablePath = await chromium.executablePath();
+  
+      browser = await puppeteerCore.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath,
+        headless: false,
+      });
+   
+    } else {
+      browser = await puppeteer.launch(config);
+    }
 
     this.instance = browser;
     this.pageInstance = await browser.newPage();

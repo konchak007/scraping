@@ -25,7 +25,7 @@ export const highlightsGatherData = async (
 			tooltipContent = tooltipContent.replace(/<i>/g, "").replace(/<\/i>/g, ""); // Remove <i> and </i> tags
 			const titleText = (
 				item.querySelector("span.sg-text__title") as HTMLElement
-			).innerText.trim();
+			)?.innerText?.trim();
 			obj[tooltipContent] = titleText;
 		});
 		return obj;
@@ -34,8 +34,8 @@ export const highlightsGatherData = async (
 	const services = await page.evaluate(() => {
 		const items = document.querySelectorAll("ul.chart-legend--list li");
 		return Array.from(items).map((item) => {
-			const service = item.querySelector("a").innerText.trim();
-			const percentage = item.querySelector("span").innerText.trim();
+			const service = item.querySelector("a")?.innerText?.trim();
+			const percentage = item.querySelector("span")?.innerText?.trim();
 			return { [service]: percentage };
 		});
 	});
