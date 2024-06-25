@@ -18,9 +18,10 @@ class Browser {
       browser = await puppeteerCore.launch({
         args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(
-          `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
-        ),
+        executablePath:await chromium.executablePath(),
+        //  await chromium.executablePath(
+        //   `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+        // ),
         headless: false,
       });
    
