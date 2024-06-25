@@ -9,16 +9,17 @@ class Browser {
   private pageInstance: Page = null;
 
   async init(config: object) {
-    chromium.setGraphicsMode = false
+    // chromium.setGraphicsMode = false
   
     if (process.env.VERCEL_ENV === "production") {
       console.log(124)
-      const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar');
   
       browser = await puppeteerCore.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath,
+        executablePath: await chromium.executablePath(
+          `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+        ),
         headless: false,
       });
    
