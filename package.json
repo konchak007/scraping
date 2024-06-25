@@ -22,7 +22,7 @@
     "xlsx": "^0.18.5"
   },
   "engines": {
-    "node": ">=18"
+    "node": "18"
   },
   "devDependencies": {
     "@types/node": "20.14.5",

@@ -1,7 +1,8 @@
 "use server";
-import chromium from '@sparticuz/chromium-min'
-import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
 
+import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
+const chromium = require('@sparticuz/chromium-min');
+const puppeteer = require('puppeteer-core');
 let browser;
 
 class Browser {
@@ -15,7 +16,7 @@ class Browser {
       console.log(124)
   
       browser = await puppeteerCore.launch({
-        args: chromium.args,
+        args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
         defaultViewport: chromium.defaultViewport,
         executablePath: await chromium.executablePath(
           `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
