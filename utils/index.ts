@@ -1,8 +1,8 @@
 "use server";
 
 import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
-// const chromium = require('@sparticuz/chromium-min');
-const chromium = require("@sparticuz/chromium");
+const chromium = require('@sparticuz/chromium-min');
+// const chromium = require("@sparticuz/chromium");
 let browser;
 
 class Browser {
