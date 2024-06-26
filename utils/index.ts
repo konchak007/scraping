@@ -6,7 +6,8 @@ import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
  const chromium = require('@sparticuz/chromium-min');
 // const chromium = require("@sparticuz/chromium");
 let browser;
-
+const CHROMIUM_PATH =
+  "https://vomrghiulbmrfvmhlflk.supabase.co/storage/v1/object/public/chromium-pack/chromium-v123.0.0-pack.tar";
 class Browser {
   private instance: BrowserType = null;
   private pageInstance: Page = null;
@@ -21,10 +22,9 @@ class Browser {
         args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
         defaultViewport: chromium.defaultViewport,
         // executablePath:await chromium.executablePath('/Applications/Google\ Chrome.app'),
-        executablePath: await chromium.executablePath(
-          `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
-        ),
-        headless: "new",
+        executablePath: await chromium.executablePath(CHROMIUM_PATH),
+        headless: chromium.headless,
+        
       });
    
     } else {
