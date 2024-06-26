@@ -22,7 +22,21 @@ export async function POST(req: NextRequest) {
     await browser.goto(`${CLUTCH.base}${CLUTCH.support}`);
 
     // Extract links from the page
-    const links = await pageLoop(browser);
+    const links = (await pageLoop(browser)).filter((i) =>
+      i.includes("profile"),
+    );
+    // const links = [
+    //   '/profile/eci-contact-center',
+    //   '/profile/u-call-center',
+    //   '/profile/cae-contact-center',
+    //   '/profile/attende-call-center',
+    //   '/profile/all-telecom',
+    //   '/profile/teleprom',
+    //   '/profile/pr-ximo-contact-center',
+    //   '/profile/telemercado',
+    //   '/profile/pierpointbpo',
+    //   '/profile/accesa-contact-center'
+    // ]
 
     // Split the links array into chunks
     const chunks = [];
@@ -31,23 +45,23 @@ export async function POST(req: NextRequest) {
     }
 
     // Process each chunk sequentially
-    for (const chunk of chunks) {
-      console.log(chunk);
-      const chunkResults = await Promise.all(
-        chunk.map(async (i) => {
-          const browser2 = new Browser();
-          await browser2.init({
-            headless: false,
-          });
-          await browser2.page.goto(`${CLUTCH.base}${i}`);
-          const orgData = await highlightsGatherData(browser2);
-          await browser2.close();
-          return orgData;
-        }),
-      );
-      results.push(...chunkResults);
-    }
-    return Response.json({ results });
+    // for (const chunk of chunks) {
+    //   console.log(1);
+    //   const chunkResults = await Promise.all(
+    //     chunk.map(async (i) => {
+    //       const browser2 = new Browser();
+    //       await browser2.init({
+    //         headless: false,
+    //       });
+    //       await browser2.page.goto(`${CLUTCH.base}${i}`);
+    //       const orgData = await highlightsGatherData(browser2);
+    //       await browser2.close();
+    //       return orgData;
+    //     }),
+    //   );
+    //   results.push(...chunkResults);
+    // }
+    // return Response.json({ results });
   } catch (error) {
     console.log(error);
     return Response.json({ error: error.message, results });

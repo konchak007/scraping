@@ -16,10 +16,12 @@
     "fs": "^0.0.2",
     "next": "^14.2.4",
     "puppeteer": "^22.11.2",
-    "puppeteer-core": "^21.5.1",
+    "puppeteer-core": "^21.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0",
+    "xlsx-style": "^0.8.13"
   },
   "engines": {
     "node": "18"

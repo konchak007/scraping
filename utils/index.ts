@@ -1,7 +1,9 @@
 "use server";
-
+import puppeter from "puppeteer";
 import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
-const chromium = require('@sparticuz/chromium-min');
+//  import chromium from "@sparticuz/chromium-min";
+// import chromium from 'chrome-aws-lambda'
+ const chromium = require('@sparticuz/chromium-min');
 // const chromium = require("@sparticuz/chromium");
 let browser;
 
@@ -18,15 +20,15 @@ class Browser {
       browser = await puppeteerCore.launch({
         args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
         defaultViewport: chromium.defaultViewport,
-        executablePath:await chromium.executablePath(),
-        //  await chromium.executablePath(
-        //   `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
-        // ),
-        headless: false,
+        // executablePath:await chromium.executablePath('/Applications/Google\ Chrome.app'),
+        executablePath: await chromium.executablePath(
+          `https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar`
+        ),
+        headless: "new",
       });
    
     } else {
-      browser = await puppeteerCore.launch(config);
+      browser = await puppeter.launch({...config});
     }
 
     this.instance = browser;

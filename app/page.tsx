@@ -26,18 +26,18 @@ export default function Home() {
         },
         body: JSON.stringify({ data: scrapedData }),
       });
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
 
       const now = new Date();
       const formattedDate = now.toLocaleString();
 
-      link.href = url;
-      link.setAttribute("download", `report${formattedDate}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `report${formattedDate}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Error downloading Excel file:", error);
     }
@@ -70,7 +70,7 @@ export default function Home() {
 
       <main>
         {error && <div style={{ color: "red" }}>Error: {error}</div>}
-        <h1>Scraped Data</h1>
+        <h1>wScraped Data</h1>
         <Space direction="horizontal" size={16}>
           <Button loading={loading} onClick={handleClick}>
             Generate Clutch report
