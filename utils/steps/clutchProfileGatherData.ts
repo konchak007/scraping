@@ -1,6 +1,6 @@
 import Browser from "..";
-import { Company } from "../../app/api/download/route";
 import { clutch } from "../selectors";
+import { Company } from "../types";
 
 export const highlightsGatherData = async (
 	browser: Browser
@@ -94,15 +94,16 @@ export const highlightsGatherData = async (
 	});
 
 	// new tab 1
-	await page.waitForSelector('button[aria-label="Chart Clients"]', {
+	await page.waitForSelector(clutch.profile.chartClients, {
 		visible: true,
 	});
 
-	await page.click('button[aria-label="Chart Clients"]');
+	await page.click(clutch.profile.chartClients);
 
-	await page.waitForSelector('button[aria-label="Chart Clients"].active', {
+	await page.waitForSelector(clutch.profile.chartClientsActive, {
 		visible: true,
 	});
+
 	const clientServices = await page.evaluate(() => {
 		const items = document.querySelectorAll("ul.chart-legend--list li");
 		return Array.from(items).map((item) => {
@@ -115,15 +116,16 @@ export const highlightsGatherData = async (
 	});
 
 	// new tab industries
-	await page.waitForSelector('button[aria-label="Chart Industries"]', {
+	await page.waitForSelector(clutch.profile.chartIndustries, {
 		visible: true,
 	});
 
-	await page.click('button[aria-label="Chart Industries"]');
+	await page.click(clutch.profile.chartIndustries);
 
-	await page.waitForSelector('button[aria-label="Chart Industries"].active', {
+	await page.waitForSelector(clutch.profile.chartIndustriesActive, {
 		visible: true,
 	});
+
 	const industriesServices = await page.evaluate(() => {
 		const items = document.querySelectorAll("ul.chart-legend--list li");
 		return Array.from(items).map((item) => {

@@ -70,7 +70,7 @@ export default function Home() {
 
       <main>
         {error && <div style={{ color: "red" }}>Error: {error}</div>}
-        <h1>wScraped Data</h1>
+        <h1>Scraped Data</h1>
         <Space direction="horizontal" size={16}>
           <Button loading={loading} onClick={handleClick}>
             Generate Clutch report

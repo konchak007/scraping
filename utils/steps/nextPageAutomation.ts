@@ -1,4 +1,5 @@
 import Browser from "..";
+import { CLUTCH } from "../constants";
 import { clutch } from "../selectors";
 
 const links: string[] = [];
@@ -15,7 +16,7 @@ export const pageLoop = async (browser: Browser) => {
   }, clutch.organizationLink);
   links.push(...hrefs);
 
-  const ele = await page.$(".page-item.next");
+  const ele = await page.$(clutch.nextPage);
 
   if (ele) {
     pageNumber += 1;
@@ -26,7 +27,7 @@ export const pageLoop = async (browser: Browser) => {
     });
 
     await newbBrowser.goto(
-      `https://clutch.co/call-centers/customer-support?page=${pageNumber}`,
+      `${CLUTCH.base}${CLUTCH.support}?page=${pageNumber}`,
       {
         waitUntil: "networkidle0",
       },
