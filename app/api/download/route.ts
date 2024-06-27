@@ -5,7 +5,6 @@ import * as XLSX from "xlsx-js-style";
 import { applyStyles } from "../../../utils/xlsx";
 import { Company, ExelStructure } from "../../../utils/types";
 
-
 export async function POST(req: NextRequest) {
   try {
     const { data } = await req.json();
@@ -81,4 +80,3 @@ export async function POST(req: NextRequest) {
   }
   // res.status(200).json({ message: 'File downloaded successfully' });
 }
-

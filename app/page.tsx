@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
 
-import { Button, Space } from "antd/lib";
+import { Button, Col, Row, Space } from "antd/lib";
 import { Company } from "./api/download/route";
 
 interface Response {
@@ -71,16 +71,35 @@ export default function Home() {
       <main>
         {error && <div style={{ color: "red" }}>Error: {error}</div>}
         <h1>Scraped Data</h1>
-        <Space direction="horizontal" size={16}>
-          <Button loading={loading} onClick={handleClick}>
-            Generate Clutch report
-          </Button>
-          {scrapedData.length > 0 && (
-            <Button onClick={handleDownload} type="primary">
-              Download Excel
+
+        <Col>
+          <Space
+            direction="vertical"
+            size={16}
+            align="start"
+            style={{ marginRight: 10 }}
+          >
+            <Button loading={loading} onClick={handleClick}>
+              Generate Clutch report
             </Button>
-          )}
-        </Space>
+            {scrapedData.length > 0 && (
+              <Button onClick={handleDownload} type="primary" block>
+                Download Excel
+              </Button>
+            )}
+          </Space>
+
+          <Space direction="vertical" size={16} align="end">
+            <Button loading={loading} onClick={handleClick}>
+              Generate G2 report
+            </Button>
+            {scrapedData.length > 0 && (
+              <Button onClick={handleDownload} type="primary" block>
+                Download Excel
+              </Button>
+            )}
+          </Space>
+        </Col>
       </main>
 
       <footer>
