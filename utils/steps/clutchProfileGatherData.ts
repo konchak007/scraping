@@ -137,6 +137,88 @@ export const highlightsGatherData = async (
 		});
 	});
 
+		// new tab focus
+		await page.waitForSelector('button[aria-label="Chart Focus"]', {
+			visible: true,
+		});
+		await page.click('button[aria-label="Chart Focus"]');
+		await page.waitForSelector('button[aria-label="Chart Focus"].active', {
+			visible: true,
+		});
+		const focusTab = {}
+
+	 await page.waitForSelector('#legend_title');
+		// const noFocus = await page.$eval('.chart-legend__zero-caption', (elem) =>
+		//   elem.textContent.trim()
+		// );
+		const style = await page.evaluate(() => {
+			const element = document?.querySelector('#legend_title');
+			const style = window?.getComputedStyle(element);
+			return {
+			  display: style.getPropertyValue('display'),
+			  // Add more properties as needed
+			};
+		  });
+	console.log(style.display.includes('block'))
+		if(style.display.includes('block')){
+			await browser.close();
+			return {
+				company_name,
+				overview,
+				result,
+				services,
+				metrics,
+				adress: addressText,
+				website,
+				linkedInLink,
+				clientServices,
+				industriesServices,
+				focusTab
+			};
+			
+		}
+		await page.waitForSelector('#focus-chart_dropdown-list div');
+	
+		const childCount = await page.evaluate((sel) => {
+			const parentElement = document.querySelector(sel);
+			return parentElement ? parentElement.children.length : 0;
+		  }, '#focus-chart_dropdown-list div');
+	
+
+
+		for (let i = 0; i <= childCount; i++) {
+			const text1 = await browser.getTextValueBySelector(
+				'#focus-dropdown-title'
+				);
+
+				const t = await page.evaluate(() => {
+					const items = document.querySelectorAll("ul.chart-legend--list li");
+					return Array.from(items).map((item) => {
+						const service = (item as HTMLElement)?.innerText?.trim().split("\n")[0];
+						const percentage = (item as HTMLElement)?.innerText
+							?.trim()
+							.split("\n")[1];
+						return { [service]: percentage };
+					});
+				});
+				focusTab[text1]= t
+				await page.focus('#focus-chart_dropdown-button');
+				await page.click('#focus-chart_dropdown-button');
+				await page.waitForSelector('#focus-chart_dropdown-list div');
+			
+				const next = await page.$(`#focus-chart_dropdown-list div:nth-child(${i+1})`)
+		
+				if(next){
+					await page.click(`#focus-chart_dropdown-list div:nth-child(${i+1})`);
+				}
+				
+
+
+		  }
+		  
+	
+	
+
 	await browser.close();
 
 	return {
@@ -150,5 +232,6 @@ export const highlightsGatherData = async (
 		linkedInLink,
 		clientServices,
 		industriesServices,
+		focusTab
 	};
 };

@@ -1,40 +1,37 @@
 "use server";
-import puppeter from "puppeteer";
-import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer-core";
-//  import chromium from "@sparticuz/chromium-min";
-// import chromium from 'chrome-aws-lambda'
- const chromium = require('@sparticuz/chromium-min');
-// const chromium = require("@sparticuz/chromium");
+import puppeter  from "puppeteer-extra";
+import RecaptchaPlugin from "puppeteer-extra-plugin-recaptcha";
+ import puppeteerCore, { Browser as BrowserType, Page } from "puppeteer";
+//  import Stealth from "puppeteer-extra-plugin-stealth";
+ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+
 let browser;
-const CHROMIUM_PATH =
-  "https://vomrghiulbmrfvmhlflk.supabase.co/storage/v1/object/public/chromium-pack/chromium-v123.0.0-pack.tar";
+const PUPPETEER_ARGS = ['--no-sandbox', '--disable-setuid-sandbox', '--incognito']
 class Browser {
   private instance: BrowserType = null;
   private pageInstance: Page = null;
 
   async init(config: object) {
-    // chromium.setGraphicsMode = false
-  
-    if (process.env.VERCEL_ENV === "production") {
-      console.log(124)
-  
-      browser = await puppeteerCore.launch({
-        args: [...chromium.args, '--hide-scrollbars', '--disable-web-security'],
-        defaultViewport: chromium.defaultViewport,
-        // executablePath:await chromium.executablePath('/Applications/Google\ Chrome.app'),
-        executablePath: await chromium.executablePath(CHROMIUM_PATH),
-        headless: chromium.headless,
-        
-      });
-   
-    } else {
-      browser = await puppeter.launch({...config});
-    }
+    const AnonymizeUA = require('puppeteer-extra-plugin-anonymize-ua')()
+  puppeter.use(AnonymizeUA);
+    browser =  await puppeter.use(
+      StealthPlugin(),
+  ).launch({...config})
+  const ws_endpoint_url = browser.wsEndpoint();
+//   browser = await puppeter.connect({
+//     browserWSEndpoint: ws_endpoint_url
+// });
+
+
+
 
     this.instance = browser;
-    this.pageInstance = await browser.newPage();
+    
+    this.pageInstance = await browser.newPage() as Page;
     this.pageInstance.setDefaultNavigationTimeout(0);
     await this.pageInstance.setViewport({ width: 1080, height: 3024 });
+
+
   }
 
   public goto(url: string, params?: any) {

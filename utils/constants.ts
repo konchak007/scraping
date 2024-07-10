@@ -3,3 +3,9 @@ export const CLUTCH = {
   support: '/call-centers/customer-support',
   profile: 'https://clutch.co/profile/',
 };
+
+export const G2 = {
+  base: 'https://www.g2.com/categories/call-center-infrastructure-cci',
+  support: '/call-centers/customer-support',
+  profile: 'https://clutch.co/profile/',
+};

@@ -16,16 +16,26 @@ export const pageLoop = async (browser: Browser) => {
   }, clutch.organizationLink);
   links.push(...hrefs);
 
-  const ele = await page.$(clutch.nextPage);
 
-  if (ele) {
+  const elements = await page.evaluate((selector) => {
+    const allElements = Array.from(document.querySelectorAll(selector));
+    return allElements
+      .filter(el => !el.classList.contains('sg-pagination-v2-disabled'))
+      .map(el => {
+        const classes = Array.from(el.classList);
+        return `${el.tagName.toLowerCase()}.${classes.join('.')}`;
+      });
+  }, clutch.nextPage);
+
+
+  if (elements.length>0) {
     pageNumber += 1;
     await browser.close();
     const newbBrowser = new Browser();
     await newbBrowser.init({
       headless: false,
     });
-
+console.log(pageNumber)
     await newbBrowser.goto(
       `${CLUTCH.base}${CLUTCH.support}?page=${pageNumber}`,
       {

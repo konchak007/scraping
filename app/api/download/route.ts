@@ -20,8 +20,10 @@ export async function POST(req: NextRequest) {
         clientServices,
         industriesServices,
         services,
+        focusTab,
       } = company;
 
+      const focusTabs = Object.keys(focusTab);
       return {
         company_name,
         overview,
@@ -35,14 +37,23 @@ export async function POST(req: NextRequest) {
         headquarter: metrics["Total Reviews"],
         website,
         services_percent: services
-          .map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
-          .join("\n"),
+          ?.map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
+          ?.join("\n"),
         clients_percent: clientServices
-          .map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
-          .join("\n"),
+          ?.map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
+          ?.join("\n"),
         industries_percent: industriesServices
-          .map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
-          .join("\n"),
+          ?.map((obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`)
+          ?.join("\n"),
+        focusTab: focusTabs
+          ?.map((i) => {
+            return `- ${i}:\n${focusTab[i]
+              ?.map(
+                (obj) => `${Object.keys(obj)[0]}: '${Object.values(obj)[0]}'`,
+              )
+              ?.join("\n")}\n`;
+          })
+          ?.toString(),
       };
     });
 

@@ -12,6 +12,9 @@ interface Services {
     clientServices: Services[];
     industriesServices: Services[];
     metrics: Services;
+    focusTab:{
+      [key: string]: Services[]
+    }
   }
   
  export interface ExelStructure {
@@ -28,4 +31,12 @@ interface Services {
     website: string;
     clients_percent: string;
     industries_percent: string;
+  }
+
+  export interface CompanyG2 {
+    description:string;
+    company_name: string;
+    website: string;
+    rating:string;
+    overview:string;
   }

@@ -1,7 +1,7 @@
 export const clutch = {
-  organizationList: '.directory-list',
-  organizationLink: 'h3.company_info a[data-link_text="Profile Title"]',
-   nextPage: '.page-item.next', 
+  organizationList: '.providers__list',
+  organizationLink: 'h3.provider__title a[data-link_text="Profile Title"]',
+   nextPage: '.sg-pagination-v2-next', 
   profile: {
     chartClients:'button[aria-label="Chart Clients"]',
     chartClientsActive:'button[aria-label="Chart Clients"].active',

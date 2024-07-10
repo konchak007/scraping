@@ -22,26 +22,16 @@ export async function POST(req: NextRequest) {
     await browser.goto(`${CLUTCH.base}${CLUTCH.support}`);
 
     // Extract links from the page
-    const links = (await pageLoop(browser)).filter((i) =>
+    const links = await pageLoop(browser);
+
+    const uniqueArray: string[] = [...new Set(links)].filter((i) =>
       i.includes("profile"),
     );
-    // const links = [
-    //   '/profile/eci-contact-center',
-    //   '/profile/u-call-center',
-    //   '/profile/cae-contact-center',
-    //   '/profile/attende-call-center',
-    //   '/profile/all-telecom',
-    //   '/profile/teleprom',
-    //   '/profile/pr-ximo-contact-center',
-    //   '/profile/telemercado',
-    //   '/profile/pierpointbpo',
-    //   '/profile/accesa-contact-center'
-    // ]
 
     // Split the links array into chunks
     const chunks = [];
-    for (let i = 0; i < links.length; i += chunkSize) {
-      chunks.push(links.slice(i, i + chunkSize));
+    for (let i = 0; i <= uniqueArray.length; i += chunkSize) {
+      chunks.push(uniqueArray.slice(i, i + chunkSize));
     }
 
     // Process each chunk sequentially

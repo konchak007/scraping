@@ -2,8 +2,8 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: [
       'puppeteer-core',
-      'puppeteer',
-      '@sparticuz/chromium-min',  '@sparticuz/chromium',
+      'puppeteer','puppeteer-extra-plugin-anonymize-ua',
+      '@sparticuz/chromium-min',  '@sparticuz/chromium','puppeteer-extra-plugin-recaptcha', 'puppeteer-extra','puppeteer-extra-plugin-stealth'
     ]
   }
 }

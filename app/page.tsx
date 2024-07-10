@@ -4,7 +4,7 @@ import { useState } from "react";
 import styles from "../styles/Home.module.css";
 
 import { Button, Col, Row, Space } from "antd/lib";
-import { Company } from "./api/download/route";
+import { Company } from "../utils/types";
 
 interface Response {
   error: "";
@@ -12,11 +12,12 @@ interface Response {
 }
 
 export default function Home() {
-  const [clutchReport, setClutchReportStatus] = useState<boolean>();
+  const [scrapedG2Data, setScrapedG2Data] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingG2, setLoadingG2] = useState<boolean>(false);
   const [scrapedData, setScrapedData] = useState<Company[]>([]);
   const [error, setError] = useState<string>("");
-
+  console.log(scrapedData);
   const handleDownload = async () => {
     try {
       const response = await fetch("/api/download", {
@@ -61,6 +62,49 @@ export default function Home() {
     setLoading(false);
   };
 
+  const handleG2Click = async () => {
+    setLoadingG2(true);
+    setError("");
+    setScrapedG2Data([]);
+    try {
+      const response = await fetch("/api/g2", { method: "POST" });
+      const data: Response = await response.json();
+
+      setScrapedG2Data(data?.results);
+      setError(data?.error);
+    } catch (error) {
+      console.error("Error:", error.error);
+      setScrapedG2Data([]);
+      setError(error.error);
+    }
+    setLoadingG2(false);
+  };
+  const handleG2Download = async () => {
+    try {
+      const response = await fetch("/api/download-g2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: scrapedG2Data }),
+      });
+
+      const now = new Date();
+      const formattedDate = now.toLocaleString();
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `g2-report${formattedDate}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading Excel file:", error);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -90,11 +134,11 @@ export default function Home() {
           </Space>
 
           <Space direction="vertical" size={16} align="end">
-            <Button loading={loading} onClick={handleClick}>
+            <Button loading={loadingG2} onClick={handleG2Click}>
               Generate G2 report
             </Button>
-            {scrapedData.length > 0 && (
-              <Button onClick={handleDownload} type="primary" block>
+            {scrapedG2Data.length > 0 && (
+              <Button onClick={handleG2Download} type="primary" block>
                 Download Excel
               </Button>
             )}
